@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mountains</title>
+  </head>
+  <body>
+    <div id="mountains"></div>
+    <script>
+      const getData = async () => {
+        try {
+          const response = await fetch("./mountains.json");
+          const json = await response.json();
+
+          return json;
+        } catch (e) {
+          console.log(e);
+
+          return null;
+        }
+      };
+
+      const createElement = (tagName, content) => {
+        const element = document.createElement(tagName);
+
+        element.textContent = content;
+
+        return element;
+      };
+
+      const mountainsDataMapper = (data) =>
+        data.map(({ mountainMainName, heightMetres, mountainMainCountry }) => ({
+          name: mountainMainName,
+          height: heightMetres,
+          place: mountainMainCountry,
+        }));
+
+      const createDataTable = (data) => {
+        if (!Array.isArray(data) || !data.length) return;
+
+        const table = document.createElement("table");
+        const heading = document.createElement("tr");
+        const headingColumns = Object.keys(data[0]).map((columnName) =>
+          createElement("th", columnName)
+        );
+
+        heading.append(...headingColumns);
+
+        const body = data.map((entry) => {
+          const row = document.createElement("tr");
+          const cells = Object.values(entry).map((value) => {
+            const cell = createElement("td", value);
+            cell.style.textAlign = /^\d+$/g.test(value) ? "right" : "center";
+
+            return cell;
+          });
+
+          row.append(...cells);
+
+          return row;
+        });
+
+        table.appendChild(heading);
+        table.append(...body);
+
+        return table;
+      };
+
+      (async () => {
+        const jsonData = await getData();
+        const mountainsData = mountainsDataMapper(jsonData);
+        const container = document.getElementById("mountains");
+        const table = createDataTable(mountainsData);
+
+        container.append(table);
+      })();
+    </script>
+  </body>
+</html>

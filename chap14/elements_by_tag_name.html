@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <p>
+        Document
+        <a>
+          <b>
+            <span>
+              <a></a>
+            </span>
+          </b>
+        </a>
+
+        <a>
+          <span>
+            <a></a>
+          </span>
+        </a>
+      </p>
+    </div>
+    <script>
+      const getElementsByTagName = (node, tagName) => {
+        const result = [];
+
+        if (
+          node &&
+          node.nodeName &&
+          node.nodeName.toLowerCase() === tagName.toLowerCase()
+        ) {
+          result.push(node);
+        }
+
+        if (node.hasChildNodes()) {
+          for (let child of node.childNodes) {
+            result.push(...getElementsByTagName(child, tagName));
+          }
+        }
+
+        return result;
+      };
+
+      const target = document.querySelector("div");
+
+      console.log(getElementsByTagName(target, "a"));
+    </script>
+  </body>
+</html>
