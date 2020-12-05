@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="balloon" style="position: absolute">🎈</div>
+    <script>
+      const balloon = document.getElementById("balloon");
+      const threshold = 500;
+
+      const getFontSize = (elem) => {
+        const match = window.getComputedStyle(elem).fontSize.match(/[\d\.]+/g);
+
+        return match ? +match[0] : null;
+      };
+
+      const setFontSize = (elem, fontSize, unit = "px") =>
+        (elem.style.fontSize = fontSize + unit);
+
+      const explode = () => {
+        balloon.textContent = "💥";
+
+        window.removeEventListener("keydown", listener);
+      };
+
+      const inflate = () => {
+        const currentFontSize = getFontSize(balloon);
+        setFontSize(balloon, currentFontSize * 1.1);
+
+        if (getFontSize(balloon) >= threshold) {
+          explode()
+        }
+      };
+
+      const deflate = () => {
+        const currentFontSize = getFontSize(balloon);
+        setFontSize(balloon, currentFontSize * 0.9);
+      };
+
+      function listener(e) {
+        const { key, keyCode } = e;
+
+        if (key === "ArrowUp" || keyCode === 38) {
+          inflate();
+        } else if (key === "ArrowDown" || keyCode === 40) {
+          deflate();
+        }
+      }
+
+      window.addEventListener("keydown", listener);
+    </script>
+  </body>
+</html>

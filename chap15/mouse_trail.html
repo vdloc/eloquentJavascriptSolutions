@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mouse Trail</title>
+    <style>
+      .mouse {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 30px 30px 0 0;
+        border-color: #d40c0c transparent transparent;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+    <div class="mouse"></div>
+
+    <script>
+      const mouses = document.querySelectorAll(".mouse");
+
+      window.addEventListener("mousemove", (e) => {
+        const { x, y } = e;
+
+        mouses.forEach((mouse, index) => {
+          let start;
+          let timer;
+          const update = (timeStamp) => {
+            if (start === undefined) {
+              start = timeStamp;
+            }
+
+            let elapsedTime = timeStamp - start;
+
+            if (elapsedTime > index * 50) {
+              mouse.style.top = y + "px";
+              mouse.style.left = x + "px";
+              return cancelAnimationFrame(timer);
+            }
+
+            timer = requestAnimationFrame(update);
+          };
+
+          requestAnimationFrame(update);
+        });
+      });
+    </script>
+  </body>
+</html>

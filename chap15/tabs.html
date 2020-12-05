@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabs</title>
+    <style>
+      #tab {
+        width: 500px;
+        height: 400px;
+        border: 1px solid #ccc;
+        margin: 0 auto;
+      }
+      #tab > p:not([data-active="true"]) {
+        display: none;
+      }
+
+      #tab > button {
+        width: 100px;
+        height: 50px;
+        outline: none;
+        border: 1px solid #e6d;
+        border-radius: 0;
+        background: whitesmoke;
+        margin-right: 1em;
+      }
+
+      #tab > button.active {
+        border: 1px solid #2c7;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tab">
+      <p data-tabname="world">Hello, world!</p>
+      <p data-tabname="john-doe" data-active="true">Hello, John Doe!</p>
+      <p data-tabname="foobar">Hello, Foobar!</p>
+    </div>
+
+    <script>
+      const asTab = (node) => {
+        if (!node || !node.hasChildNodes()) return;
+
+        const childs = [...node.children];
+
+        const tabButtons = childs.map((child, index) => {
+          const button = document.createElement("button");
+          const isActiveTab = child.getAttribute("data-active");
+
+          button.textContent = child.getAttribute("data-tabname");
+          isActiveTab && button.classList.add("active");
+          button.addEventListener("click", tabClickHandler);
+
+          return button;
+        });
+
+        function tabClickHandler(e) {
+          const { textContent } = e.target;
+
+          tabButtons.forEach((tab) => tab.classList.remove("active"));
+          e.target.classList.add("active");
+
+          childs.forEach((child) => {
+            if (child.getAttribute("data-tabname") !== textContent) {
+              child.style.display = "none";
+            } else {
+              child.style.display = "block";
+            }
+          });
+        }
+
+        node.prepend(...tabButtons);
+      };
+
+      const tab = document.getElementById("tab");
+      asTab(tab);
+    </script>
+  </body>
+</html>
